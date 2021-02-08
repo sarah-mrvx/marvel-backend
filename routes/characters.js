@@ -16,9 +16,14 @@ router.get("/characters", async (req, res) => {
         let characters = {};
         //Search
         if (name) {
-          characters = [
+          searchCharacter = [
             await results.find((character) => character.name == name),
           ];
+          if (searchCharacter[0]) {
+            characters = searchCharacter;
+          } else {
+            characters = results;
+          }
         } else characters = results;
 
         //   if (name) {

@@ -13,7 +13,7 @@ router.get("/characters", async (req, res) => {
         const { count, limit, results } = response.data;
         const { name, page } = req.query;
         let characters = {};
-
+        console.log(limit);
         //Pagination
         let skip = "";
         if (page) {
@@ -29,8 +29,7 @@ router.get("/characters", async (req, res) => {
           );
           // .limit(limit)
           // .skip(skip);
-        } else characters = response.data;
-        // .limit(limit).skip(skip);
+        } else characters = results.slice(skip, skip + limit - 1);
 
         //   if (name) {
         //       filters.character.name = new RegExp(req.query.name, "i");

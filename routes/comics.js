@@ -14,18 +14,10 @@ router.get("/comics", async (req, res) => {
 
         let comics = {};
 
-        //Pagination
-        let skip = "";
-        if (page) {
-          skip = (page - 1) * limit;
-        } else {
-          skip = 0;
-        }
-
         //Search
         if (title) {
           comics = await results.find((comic) => comic.title == title);
-        } else comics = response.data;
+        } else comics = results;
 
         return res.status(200).json(comics);
       })

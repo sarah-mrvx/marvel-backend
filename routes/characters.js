@@ -5,31 +5,21 @@ require("dotenv").config();
 
 router.get("/characters", async (req, res) => {
   try {
+    const { name, skip } = req.query;
     const response = await axios
       .get(
-        `https://lereacteur-marvel-api.herokuapp.com/characters?apiKey=${process.env.MARVEL_API_KEY}`
+        `https://lereacteur-marvel-api.herokuapp.com/characters?apiKey=${process.env.MARVEL_API_KEY}&skip=${skip}`
       )
       .then(async (response) => {
         const { count, limit, results } = response.data;
-        const { name, page } = req.query;
-        let characters = {};
-        console.log(limit);
-        //Pagination
-        let skip = "";
-        if (page) {
-          skip = (page - 1) * limit;
-        } else {
-          skip = 0;
-        }
 
+        let characters = {};
         //Search
         if (name) {
           characters = await results.find(
             (character) => character.name == name
           );
-          // .limit(limit)
-          // .skip(skip);
-        } else characters = results.slice(skip, skip + limit - 1);
+        } else characters = results;
 
         //   if (name) {
         //       filters.character.name = new RegExp(req.query.name, "i");

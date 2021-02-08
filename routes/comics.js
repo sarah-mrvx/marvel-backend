@@ -16,7 +16,12 @@ router.get("/comics", async (req, res) => {
 
         //Search
         if (title) {
-          comics = await results.find((comic) => comic.title == title);
+          searchTitle = [await results.find((comic) => comic.title == title)];
+          if (searchTitle[0]) {
+            comics = searchTitle;
+          } else {
+            comics = results;
+          }
         } else comics = results;
 
         return res.status(200).json(comics);

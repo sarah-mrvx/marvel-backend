@@ -4,25 +4,23 @@ const router = express.Router();
 
 router.get("/comics", async (req, res) => {
   try {
+    const { title } = req.query;
     const response = await axios
       .get(
         `https://lereacteur-marvel-api.herokuapp.com/comics?apiKey=${process.env.MARVEL_API_KEY}`
       )
       .then(async (response) => {
-        const { count, limit, results } = response.data;
-        const { title, page } = req.query;
+        const { results } = response.data;
 
-        let comics = {};
-
-        //Search
+        let comics = [];
         if (title) {
-          searchTitle = [await results.find((comic) => comic.title == title)];
-          if (searchTitle[0]) {
-            comics = searchTitle;
-          } else {
-            comics = results;
-          }
-        } else comics = results;
+          const regex = new RegExp(title, "i");
+          comics = results.filter((comics) => {
+            return regex.test(comics.title);
+          });
+        } else {
+          comics = results;
+        }
 
         return res.status(200).json(comics);
       })
